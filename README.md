@@ -1,6 +1,6 @@
 [<img width="134" src="https://vk.com/images/apps/mini_apps/vk_mini_apps_logo.svg">](https://vk.com/services)
 
-# Dhyan Timer инчструмент для медитации: таймер, трекер, социальная интеграция и обучение медитации. Если желаете поучаствовать, пишите vbirukov@gmail.com [![npm][npm]][npm-url] [![deps][deps]][deps-url]
+# Dhyan Timer инструмент для медитации: таймер, трекер, социальная интеграция и обучение медитации. Если желаете поучаствовать, пишите vbirukov@gmail.com [![npm][npm]][npm-url] [![deps][deps]][deps-url]
 
 ## Стек
 ### VK-mini app + AWS serverless infrastructure
