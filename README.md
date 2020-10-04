@@ -2,6 +2,9 @@
 
 # Dhyan Timer инструмент для медитации: таймер, трекер, социальная интеграция и обучение медитации. Если желаете поучаствовать, пишите vbirukov@gmail.com [![npm][npm]][npm-url] [![deps][deps]][deps-url]
 
+#https://vk.com/app7595020
+
+
 ## Стек
 ### VK-mini app + AWS serverless infrastructure
 
