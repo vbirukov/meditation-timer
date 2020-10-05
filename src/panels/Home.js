@@ -17,6 +17,21 @@ const flexCenter = {
 	justifyContent: 'center'
 };
 
+const BUTTONSVOC = [
+	{
+		name: 'start',
+		method: this.startTimer.bind(this),
+	},
+	{
+		name: 'stop',
+		method: this.stopTimer.bind(this),
+	},
+	{
+		name: 'reset',
+		method: this.resetTimer.bind(this),
+	}
+];
+
 class Home extends Component {
 
 	constructor(props) {
@@ -46,20 +61,6 @@ class Home extends Component {
 			deadLine: Date.now() + this.props.duration,
 			startSound: new Audio(audiolib.bellHighTone),
 			stopSound: new Audio(audiolib.bellLowTone),
-			buttonsVoc: [
-				{
-					name: 'start',
-					method: this.startTimer.bind(this),
-				},
-				{
-					name: 'stop',
-					method: this.stopTimer.bind(this),
-				},
-				{
-					name: 'reset',
-					method: this.resetTimer.bind(this),
-				}
-			],
 			buttons: [true, false, false]
 		};
 	}
@@ -126,7 +127,7 @@ class Home extends Component {
 			<Group title="controls">
 				<Div style={flexCenter}>
 					{
-						this.state.buttonsVoc.map((item, index) => {
+						BUTTONSVOC.map((item, index) => {
 							if (this.state.buttons[index]) {
 								return <Button key={index} size="xl" onClick={item.method}>
 									{item.name}
