@@ -4,6 +4,10 @@ import {View, ModalRoot, ModalPage, ModalCard, ModalPageHeader, PanelHeaderButto
 import {Icon24Cancel, Icon24Done} from '@vkontakte/icons';
 import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
+
+Amplify.configure(awsconfig);
 
 const APP_ID = 7595020;
 const MILISECONDS_IN_MINUTE = 60000;
