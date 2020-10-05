@@ -41,14 +41,17 @@ class Home extends Component {
 		{
 			name: 'start',
 			method: this.startTimer.bind(this),
+			visible: this.state.startButtonVisible
 		},
 		{
 			name: 'stop',
 			method: this.stopTimer.bind(this),
+			visible: this.state.stopButtonVisible
 		},
 		{
-			name: 'reset',
+			name: 'restart',
 			method: this.resetTimer.bind(this),
+			visible: this.state.resetButtonVisible
 		}
 	]
 
@@ -61,7 +64,9 @@ class Home extends Component {
 			deadLine: Date.now() + this.props.duration,
 			startSound: new Audio(audiolib.bellHighTone),
 			stopSound: new Audio(audiolib.bellLowTone),
-			buttons: [true, false, false]
+			startButtonVisible: true,
+			stopButtonVisible: false,
+			resetButtonVisible: false
 		};
 	}
 
@@ -71,7 +76,9 @@ class Home extends Component {
 			timeLeft: this.state.duration,
 			start: Date.now(),
 			deadLine: Date.now() + this.state.duration,
-			buttons: [false, true, true]
+			startButtonVisible: false,
+			stopButtonVisible: true,
+			resetButtonVisible: true
 		});
 		this.state.startSound.play();
 		this.timer = setInterval(() => {
@@ -90,7 +97,9 @@ class Home extends Component {
 	stopTimer() {
 		this.setState({
 			isOn: false,
-			buttons: [true, false, true]
+			startButtonVisible: true,
+			stopButtonVisible: false,
+			resetButtonVisible: false
 		})
 		clearInterval(this.timer)
 	}
@@ -100,7 +109,9 @@ class Home extends Component {
 			timeLeft: this.state.duration,
 			isOn: false,
 			deadLine: Date.now() + (this.state.duration),
-			buttons: [true, false, false]
+			startButtonVisible: true,
+			stopButtonVisible: false,
+			resetButtonVisible: false
 		})
 	}
 
@@ -128,7 +139,7 @@ class Home extends Component {
 				<Div style={flexCenter}>
 					{
 						this.BUTTONSVOC.map((item, index) => {
-							if (this.state.buttons[index]) {
+							if (item.visible) {
 								return <Button key={index} size="xl" onClick={item.method}>
 									{item.name}
 								</Button>
