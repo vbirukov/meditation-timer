@@ -17,9 +17,6 @@ const flexCenter = {
 	justifyContent: 'center'
 };
 
-const
-];
-
 class Home extends Component {
 
 	constructor(props) {
