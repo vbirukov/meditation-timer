@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import {View, ModalRoot, ModalPage, ModalCard, ModalPageHeader, PanelHeaderButton, platform, ANDROID, IOS, ScreenSpinner} from '@vkontakte/vkui';
-import {Icon24Cancel, Icon24Done} from '@vkontakte/icons';
+import {View, ModalRoot, ModalCard, platform, ScreenSpinner, Slider, Input, ANDROID, IOS} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
 import Amplify from 'aws-amplify';
@@ -78,29 +77,6 @@ class App extends Component {
 
 		const modal = (
 			<ModalRoot activeModal={this.state.activeModal}>
-				<ModalPage
-					header={
-						<ModalPageHeader
-							left={this.state.platform === ANDROID && <PanelHeaderButton onClick={() => {
-								this.setState({
-									duration: 0,
-									activeModal: null
-								})
-							}}><Icon24Cancel /></PanelHeaderButton>}
-							right={<PanelHeaderButton onClick={() => {
-								this.setState({
-									duration: this.state.durationBuffer * MILISECONDS_IN_MINUTE,
-									activeModal: null
-								})
-							}}>{this.state.platform === IOS ? 'Готово' : <Icon24Done />}</PanelHeaderButton>}
-						>
-							Установите длительность
-						</ModalPageHeader>
-					}
-					id="timeInput">
-					<input type={'number'} onChange={this.handleChange.bind(this)}/>
-				</ModalPage>
-
 				<ModalCard
 					id='timeInputTest'
 					onClose={() => this.setState({
@@ -119,7 +95,20 @@ class App extends Component {
 						}
 					}]}
 				>
-					<input type={'number'} onChange={this.handleChange.bind(this)}/>
+					{
+						platform() === ANDROID || platform() === IOS ?
+						<Slider
+							min={1}
+							max={90}
+							value={this.state.durationBuffer}
+							onChange={(durationBuffer) => {
+								this.setState({durationBuffer})
+							}}
+							step={1}
+							top="Simple [1, 90]"
+						/> : null
+					}
+					<Input value={String(this.state.durationBuffer)} onChange={e => this.setState({ durationBuffer: e.target.value })} type="number"/>
 				</ModalCard>
 			</ModalRoot>
 		);

@@ -31,29 +31,12 @@ class Home extends Component {
 	shouldComponentUpdate(nextProps, nextState, nextContext) {
 		if (nextProps.duration && this.state.duration !== nextProps.duration) {
 			this.setState({
-				duration: nextProps.duration
+				duration: nextProps.duration,
+				timeLeft: nextProps.duration
 			})
 		}
 		return true;
 	}
-
-	BUTTONSVOC = [
-		{
-			name: 'start',
-			method: this.startTimer.bind(this),
-			visible: this.state.startButtonVisible
-		},
-		{
-			name: 'stop',
-			method: this.stopTimer.bind(this),
-			visible: this.state.stopButtonVisible
-		},
-		{
-			name: 'restart',
-			method: this.resetTimer.bind(this),
-			visible: this.state.resetButtonVisible
-		}
-	]
 
 	getInitState() {
 		return {
@@ -64,9 +47,6 @@ class Home extends Component {
 			deadLine: Date.now() + this.props.duration,
 			startSound: new Audio(audiolib.bellHighTone),
 			stopSound: new Audio(audiolib.bellLowTone),
-			startButtonVisible: true,
-			stopButtonVisible: false,
-			resetButtonVisible: false
 		};
 	}
 
@@ -75,10 +55,7 @@ class Home extends Component {
 			isOn: true,
 			timeLeft: this.state.duration,
 			start: Date.now(),
-			deadLine: Date.now() + this.state.duration,
-			startButtonVisible: false,
-			stopButtonVisible: true,
-			resetButtonVisible: true
+			deadLine: Date.now() + this.state.duration
 		});
 		this.state.startSound.play();
 		this.timer = setInterval(() => {
@@ -96,22 +73,16 @@ class Home extends Component {
 
 	stopTimer() {
 		this.setState({
-			isOn: false,
-			startButtonVisible: true,
-			stopButtonVisible: false,
-			resetButtonVisible: false
+			isOn: false
 		})
 		clearInterval(this.timer)
 	}
 
 	resetTimer() {
+		this.stopTimer();
 		this.setState({
 			timeLeft: this.state.duration,
-			isOn: false,
-			deadLine: Date.now() + (this.state.duration),
-			startButtonVisible: true,
-			stopButtonVisible: false,
-			resetButtonVisible: false
+			deadLine: Date.now() + (this.state.duration)
 		})
 	}
 
@@ -137,14 +108,17 @@ class Home extends Component {
 
 			<Group title="controls">
 				<Div style={flexCenter}>
+					{   this.state.isOn ? <Button size="xl" onClick={this.state.stopTimer}>
+							Stop
+							</Button> : <Button size="xl" onClick={this.startTimer}>
+								Start
+							</Button>
+					}
 					{
-						this.BUTTONSVOC.map((item, index) => {
-							if (item.visible) {
-								return <Button key={index} size="xl" onClick={item.method}>
-									{item.name}
-								</Button>
-							}
-						})
+						this.state.duration !== this.state.timeLeft ?
+						<Button size="xl" onClick={this.resetTimer}>
+							Reset
+						</Button> : null
 					}
 				</Div>
 			</Group>
