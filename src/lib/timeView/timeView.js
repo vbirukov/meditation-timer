@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import PropTypes from "prop-types";
 
 
@@ -7,8 +7,6 @@ const MILISECONDS_IN_SECOND = 1000;
 
 const TimeView = (props) => {
 
-    const [count, setCount] = useState(0);
-
     const textStyle = {
         fontSize: '3.5em'
     }
@@ -16,6 +14,7 @@ const TimeView = (props) => {
     const preZero = (time) => {
         return (time < 10 ? '0' : '') + time;
     };
+
 
     const getStringTime = () => {
         const minutes = (props.time - props.time % MILISECONDS_IN_MINUTE) / MILISECONDS_IN_MINUTE;

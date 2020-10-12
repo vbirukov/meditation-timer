@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
+import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
 import PropTypes from 'prop-types';
-import {Avatar, Touch} from '@vkontakte/vkui';
-import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
-import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
-import Button from '@vkontakte/vkui/dist/components/Button/Button';
-import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
-import Div from '@vkontakte/vkui/dist/components/Div/Div';
+import {Avatar, Switch, PanelHeader, Panel, Button, Group, Cell, Div} from '@vkontakte/vkui';
 import audiolib from '../lib/audio';
 import TimeView from '../lib/timeView/timeView';
 
@@ -67,6 +62,7 @@ class Home extends Component {
 				this.state.stopSound.play();
 				this.stopTimer();
 				this.resetTimer();
+				this.props.share();
 			}
 		}, 1);
 	}
@@ -109,18 +105,22 @@ class Home extends Component {
 			<Group title="controls">
 				<Div style={flexCenter}>
 					{   this.state.isOn ? <Button size="xl" onClick={this.state.stopTimer}>
-							Stop
-							</Button> : <Button size="xl" onClick={this.startTimer}>
-								Start
-							</Button>
+						Stop
+					</Button> : <Button size="xl" onClick={this.startTimer}>
+						Start
+					</Button>
 					}
 					{
-						this.state.duration !== this.state.timeLeft ?
-						<Button size="xl" onClick={this.resetTimer}>
-							Reset
-						</Button> : null
+						this.state.duration !== this.state.timeLeft ? <Button size="xl" onClick={this.resetTimer}>
+						Reset
+					</Button> : null
 					}
 				</Div>
+				<Cell asideContent={<Switch />}>
+					Фоновая музыка
+					<Icon28SettingsOutline
+						onClick={this.props.share}/>
+				</Cell>
 			</Group>
 		</Panel>);
 	}
@@ -131,6 +131,7 @@ Home.propTypes = {
 	duration: PropTypes.number,
 	showInput: PropTypes.func.isRequired,
 	go: PropTypes.func.isRequired,
+	share: PropTypes.func.isRequired,
 	fetchedUser: PropTypes.shape({
 		photo_200: PropTypes.string,
 		first_name: PropTypes.string,
