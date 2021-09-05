@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, Touch} from '@vkontakte/vkui';
+import {Avatar, Touch, Progress} from '@vkontakte/vkui';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
@@ -17,7 +17,7 @@ const flexCenter = {
 	justifyContent: 'center'
 };
 
-const BUTTONSVOC = [
+const CONTROL_BUTTONS = [
 	{
 		name: 'start',
 		method: this.startTimer.bind(this),
@@ -31,6 +31,10 @@ const BUTTONSVOC = [
 		method: this.resetTimer.bind(this),
 	}
 ];
+
+const getPercentRelation = (base, part) => {
+	return (part / base) * 100;
+}
 
 class Home extends Component {
 
@@ -122,12 +126,13 @@ class Home extends Component {
 
 			<Div onClick={this.props.showInput} style={flexCenter}>
 				<TimeView time={this.state.isOn ? this.state.timeLeft : this.state.duration} />
+				<Progress value={getPercentRelation(this.state.duration, this.state.timeLeft)} />
 			</Div>
 
 			<Group title="controls">
 				<Div style={flexCenter}>
 					{
-						BUTTONSVOC.map((item, index) => {
+						CONTROL_BUTTONS.map((item, index) => {
 							if (this.state.buttons[index]) {
 								return <Button key={index} size="xl" onClick={item.method}>
 									{item.name}
