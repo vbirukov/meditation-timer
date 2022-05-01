@@ -16,7 +16,7 @@ const flexCenter = {
 	justifyContent: 'center'
 };
 
-const DEFAULT_TIMER_DURATION = 10;
+const DEFAULT_TIMER_DURATION = 10 * 60000;
 
 const getPercentRelation = (base, part) => {
 	return (part / base) * 100;
@@ -125,7 +125,7 @@ class Home extends Component {
 			}
 
 			<Div onClick={e => this.toggleAdjust()} style={flexCenter}>
-				<TimeView time={this.state.isOn ? this.state.timeLeft * 60000 : this.state.duration * 60000} />
+				<TimeView time={this.state.isOn ? this.state.timeLeft : this.state.duration} />
 				<Progress value={getPercentRelation(this.state.duration, this.state.timeLeft)} />
 			</Div>
 
@@ -135,10 +135,10 @@ class Home extends Component {
 					min={1}
 					max={1000}
 					step={1}
-					value={Number(this.state.duration)}
+					value={Number(this.state.duration / 60000)}
 					onChange={value => {
 						this.setState({
-							duration: value
+							duration: value * 60000
 						})
 					}}
 				/>
