@@ -5,6 +5,12 @@ import {Icon24Cancel, Icon24Done} from '@vkontakte/icons';
 import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
 
+
+
+// TODO: УБрать APP_ID в Env
+// TODO: Добавить возможность создавать промежуточные сигналыъ
+// TODO: ДОбавить звуковое сопровождение
+
 const APP_ID = 7595020;
 const MILISECONDS_IN_MINUTE = 60000;
 
