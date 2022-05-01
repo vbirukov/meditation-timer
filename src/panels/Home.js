@@ -9,11 +9,14 @@ import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import audiolib from '../lib/audio';
 import TimeView from '../lib/timeView/timeView';
+import { Icon32PauseCircle, Icon32PlayCircle, Icon28Replay } from '@vkontakte/icons';
 
 const flexCenter = {
 	display: 'flex',
 	justifyContent: 'center'
 };
+
+const DEFAULT_TIMER_DURATION = 10;
 
 const getPercentRelation = (base, part) => {
 	return (part / base) * 100;
@@ -24,24 +27,6 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = this.getInitState();
-
-		this.startTimer = this.startTimer.bind(this);
-		this.stopTimer = this.stopTimer.bind(this);
-		this.resetTimer = this.resetTimer.bind(this);
-		this.controlButtons = [
-			{
-				name: 'start',
-				method: this.startTimer.bind(this),
-			},
-			{
-				name: 'stop',
-				method: this.stopTimer.bind(this),
-			},
-			{
-				name: 'reset',
-				method: this.resetTimer.bind(this),
-			}
-		];
 	}
 
 	shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -55,15 +40,22 @@ class Home extends Component {
 
 	getInitState() {
 		return {
-			duration: this.props.duration,
+			duration: DEFAULT_TIMER_DURATION,
 			isOn: false,
-			start: 10,
-			timeLeft: 10,
+			start: 0,
+			timeLeft: 0,
 			deadLine: Date.now() + this.props.duration,
 			startSound: new Audio(audiolib.bellHighTone),
-			stopSound: new Audio(audiolib.bellLowTone),
-			buttons: [true, false, false]
+			stopSound: new Audio(audiolib.bellLowTone)
 		};
+	}
+
+	toggleTimer() {
+		if (this.state.isOn) {
+			this.stopTimer();
+		} else {
+			this.startTimer();
+		}
 	}
 
 	startTimer() {
@@ -71,27 +63,27 @@ class Home extends Component {
 			isOn: true,
 			timeLeft: this.state.duration,
 			start: Date.now(),
-			deadLine: Date.now() + this.state.duration,
-			buttons: [false, true, true]
+			deadLine: Date.now() + this.state.duration
 		});
 		this.state.startSound.play();
 		this.timer = setInterval(() => {
 			if (this.state.timeLeft > 0) {
 				this.setState({
-					timeLeft: this.state.deadLine - Date.now()
+					timeLeft: Math.max(this.state.deadLine - Date.now(), 0)
 				})
 			} else {
 				this.state.stopSound.play();
 				this.stopTimer();
-				this.resetTimer();
+				this.setState({
+					timeLeft: 0
+				})
 			}
 		}, 1);
 	}
 
 	stopTimer() {
 		this.setState({
-			isOn: false,
-			buttons: [true, false, true]
+			isOn: false
 		})
 		clearInterval(this.timer)
 	}
@@ -100,12 +92,24 @@ class Home extends Component {
 		this.setState({
 			timeLeft: this.state.duration,
 			isOn: false,
-			deadLine: Date.now() + (this.state.duration),
-			buttons: [true, false, false]
+			deadLine: Date.now() + (this.state.duration)
 		})
 	}
 
 	render() {
+
+		let resetButton;
+
+		if (!this.state.isOn && this.state.timeLeft > 0) {
+			resetButton = <Button
+							key='reset'
+							before={<Icon28Replay/>}
+							size="m"
+							onClick={e => this.resetTimer()}>
+						</Button>;
+		} else {
+			resetButton = '';
+		}
 
 		return(<Panel id={this.props.id}>
 			<PanelHeader>Dhyan Timer</PanelHeader>
@@ -127,15 +131,14 @@ class Home extends Component {
 
 			<Group title="controls">
 				<Div style={flexCenter}>
-					{
-						this.controlButtons.map((item, index) => {
-							if (this.state.buttons[index]) {
-								return <Button key={index} size="xl" onClick={item.method}>
-									{item.name}
-								</Button>
-							}
-						})
-					}
+					<Button
+						appearance='overlay'
+						before={this.state.isOn ? (<Icon32PauseCircle/>) : (<Icon32PlayCircle/>)}
+						key='toggler'
+						size="m"
+						onClick={e => this.toggleTimer()}>
+					</Button>
+					{resetButton}
 				</Div>
 			</Group>
 		</Panel>);
@@ -144,7 +147,6 @@ class Home extends Component {
 
 Home.propTypes = {
 	id: PropTypes.string.isRequired,
-	duration: PropTypes.number,
 	showInput: PropTypes.func.isRequired,
 	go: PropTypes.func.isRequired,
 	fetchedUser: PropTypes.shape({

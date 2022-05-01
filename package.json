@@ -21,6 +21,7 @@
     "@vkontakte/icons": "^1.41.1",
     "@vkontakte/vk-bridge": "^2.2.8",
     "@vkontakte/vk-miniapps-deploy": "0.0.17",
+    "@vkontakte/vk-tunnel": "^0.1.2",
     "@vkontakte/vkui": "^3.5.0",
     "babel-eslint": "^10.1.0",
     "chalk": "^2.4.2",
