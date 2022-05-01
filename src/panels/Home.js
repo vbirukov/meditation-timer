@@ -17,21 +17,6 @@ const flexCenter = {
 	justifyContent: 'center'
 };
 
-const CONTROL_BUTTONS = [
-	{
-		name: 'start',
-		method: this.startTimer.bind(this),
-	},
-	{
-		name: 'stop',
-		method: this.stopTimer.bind(this),
-	},
-	{
-		name: 'reset',
-		method: this.resetTimer.bind(this),
-	}
-];
-
 const getPercentRelation = (base, part) => {
 	return (part / base) * 100;
 }
@@ -45,6 +30,20 @@ class Home extends Component {
 		this.startTimer = this.startTimer.bind(this);
 		this.stopTimer = this.stopTimer.bind(this);
 		this.resetTimer = this.resetTimer.bind(this);
+		this.controlButtons = [
+			{
+				name: 'start',
+				method: this.startTimer.bind(this),
+			},
+			{
+				name: 'stop',
+				method: this.stopTimer.bind(this),
+			},
+			{
+				name: 'reset',
+				method: this.resetTimer.bind(this),
+			}
+		];
 	}
 
 	shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -132,7 +131,7 @@ class Home extends Component {
 			<Group title="controls">
 				<Div style={flexCenter}>
 					{
-						CONTROL_BUTTONS.map((item, index) => {
+						this.controlButtons.map((item, index) => {
 							if (this.state.buttons[index]) {
 								return <Button key={index} size="xl" onClick={item.method}>
 									{item.name}
