@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import {View, ModalRoot, ModalPage, ModalCard, ModalPageHeader, PanelHeaderButton, platform, ANDROID, IOS, ScreenSpinner} from '@vkontakte/vkui';
+import {View, ModalRoot, ModalPage, ModalCard, ModalPageHeader, PanelHeaderButton, platform, ANDROID, IOS, ScreenSpinner, Slider} from '@vkontakte/vkui';
 import {Icon24Cancel, Icon24Done} from '@vkontakte/icons';
 import '@vkontakte/vkui/dist/vkui.css';
 import Home from './panels/Home';
@@ -23,7 +23,7 @@ class App extends Component {
 			Popout: <ScreenSpinner size='large' />,
 			activePanel: 'home',
 			activeModal: null,
-			duration: 0,
+			duration: 1,
 			platform: platform()
 		};
 	}
@@ -94,6 +94,12 @@ class App extends Component {
 						</ModalPageHeader>
 					}
 					id="timeInput">
+					<Slider
+						min={1}
+						max={1000}
+						value={Number(this.state.duration)}
+						onChange={this.handleChange.bind(this)}
+					/>
 					<input type={'number'} onChange={this.handleChange.bind(this)}/>
 				</ModalPage>
 

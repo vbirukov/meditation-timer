@@ -10,8 +10,6 @@ import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import audiolib from '../lib/audio';
 import TimeView from '../lib/timeView/timeView';
 
-const MILISECONDS_IN_MINUTE = 60000;
-
 const flexCenter = {
 	display: 'flex',
 	justifyContent: 'center'
@@ -59,8 +57,8 @@ class Home extends Component {
 		return {
 			duration: this.props.duration,
 			isOn: false,
-			start: 0,
-			timeLeft: 0,
+			start: 10,
+			timeLeft: 10,
 			deadLine: Date.now() + this.props.duration,
 			startSound: new Audio(audiolib.bellHighTone),
 			stopSound: new Audio(audiolib.bellLowTone),
@@ -110,6 +108,7 @@ class Home extends Component {
 	render() {
 
 		return(<Panel id={this.props.id}>
+			<PanelHeader>Dhyan Timer</PanelHeader>
 			{this.props.fetchedUser &&
 			<Group title={this.props.fetchedUser.first_name}>
 				<Cell
@@ -120,8 +119,6 @@ class Home extends Component {
 				</Cell>
 			</Group>
 			}
-
-			<PanelHeader>Dhyan Timer</PanelHeader>
 
 			<Div onClick={this.props.showInput} style={flexCenter}>
 				<TimeView time={this.state.isOn ? this.state.timeLeft : this.state.duration} />
