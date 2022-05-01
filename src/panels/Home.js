@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, Touch, Progress} from '@vkontakte/vkui';
+import {Avatar, Touch, Progress, Slider} from '@vkontakte/vkui';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
@@ -29,15 +29,6 @@ class Home extends Component {
 		this.state = this.getInitState();
 	}
 
-	shouldComponentUpdate(nextProps, nextState, nextContext) {
-		if (nextProps.duration && this.state.duration !== nextProps.duration) {
-			this.setState({
-				duration: nextProps.duration
-			})
-		}
-		return true;
-	}
-
 	getInitState() {
 		return {
 			duration: DEFAULT_TIMER_DURATION,
@@ -46,7 +37,8 @@ class Home extends Component {
 			timeLeft: 0,
 			deadLine: Date.now() + this.props.duration,
 			startSound: new Audio(audiolib.bellHighTone),
-			stopSound: new Audio(audiolib.bellLowTone)
+			stopSound: new Audio(audiolib.bellLowTone),
+			adjustTimer: false
 		};
 	}
 
@@ -96,6 +88,14 @@ class Home extends Component {
 		})
 	}
 
+	toggleAdjust() {
+		if (!this.state.isOn) {
+			this.setState({
+				adjustTimer: !this.state.adjustTimer
+			})
+		}
+	}
+
 	render() {
 
 		let resetButton;
@@ -124,10 +124,37 @@ class Home extends Component {
 			</Group>
 			}
 
-			<Div onClick={this.props.showInput} style={flexCenter}>
-				<TimeView time={this.state.isOn ? this.state.timeLeft : this.state.duration} />
+			<Div onClick={e => this.toggleAdjust()} style={flexCenter}>
+				<TimeView time={this.state.isOn ? this.state.timeLeft * 60000 : this.state.duration * 60000} />
 				<Progress value={getPercentRelation(this.state.duration, this.state.timeLeft)} />
 			</Div>
+
+			{
+				this.state.adjustTimer &&
+				<Slider
+					min={1}
+					max={1000}
+					step={1}
+					value={Number(this.state.duration)}
+					onChange={value => {
+						this.setState({
+							duration: value
+						})
+					}}
+				/>
+			}
+			{
+				this.state.adjustTimer &&
+				<Div style={flexCenter}>
+					<Button
+						appearance='overlay'
+						key='saveDuration'
+						size="l"
+						onClick={e => this.toggleAdjust()}>
+						Сохранить
+						</Button>
+				</Div>
+			}
 
 			<Group title="controls">
 				<Div style={flexCenter}>
