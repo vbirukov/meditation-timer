@@ -10,7 +10,8 @@ const TimeView = (props) => {
     const [count, setCount] = useState(0);
 
     const textStyle = {
-        fontSize: '3.5em'
+        fontSize: '3.5em',
+        textAlign: 'center'
     }
 
     const preZero = (time) => {

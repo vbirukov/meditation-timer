@@ -16,6 +16,14 @@ const flexCenter = {
 	justifyContent: 'center'
 };
 
+const width100 = {
+	width: '100%'
+};
+
+const textCenter = {
+	textAlign: 'center'
+}
+
 const DEFAULT_TIMER_DURATION = 10 * 60000;
 
 const getPercentRelation = (base, part) => {
@@ -34,7 +42,7 @@ class Home extends Component {
 			duration: DEFAULT_TIMER_DURATION,
 			isOn: false,
 			start: 0,
-			timeLeft: 0,
+			timeLeft: DEFAULT_TIMER_DURATION,
 			deadLine: Date.now() + this.props.duration,
 			startSound: new Audio(audiolib.bellHighTone),
 			stopSound: new Audio(audiolib.bellLowTone),
@@ -66,9 +74,6 @@ class Home extends Component {
 			} else {
 				this.state.stopSound.play();
 				this.stopTimer();
-				this.setState({
-					timeLeft: 0
-				})
 			}
 		}, 1);
 	}
@@ -100,7 +105,7 @@ class Home extends Component {
 
 		let resetButton;
 
-		if (!this.state.isOn && this.state.timeLeft > 0) {
+		if (!this.state.isOn && this.state.timeLeft !== this.state.duration) {
 			resetButton = <Button
 							key='reset'
 							before={<Icon28Replay/>}
@@ -124,9 +129,9 @@ class Home extends Component {
 			</Group>
 			}
 
-			<Div onClick={e => this.toggleAdjust()} style={flexCenter}>
-				<TimeView time={this.state.isOn ? this.state.timeLeft : this.state.duration} />
-				<Progress value={getPercentRelation(this.state.duration, this.state.timeLeft)} />
+			<Div onClick={e => this.toggleAdjust()}>
+				<TimeView time={this.state.timeLeft} />
+				<Progress style={width100} value={getPercentRelation(this.state.duration, this.state.duration - this.state.timeLeft)} />
 			</Div>
 
 			{
