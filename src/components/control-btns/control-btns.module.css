@@ -4,13 +4,7 @@
 	align-items: center;
 	justify-content: center;
 }
-.width100 {
-	width: 100%;
-}
-.textCenter {
-    text-align: center;
-}
-.playButton {
+.controlButton {
 	border-radius: 50%;
 	width: 65px;
 	height: 65px;
