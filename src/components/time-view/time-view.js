@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from "prop-types";
-
+import styles from './timer-view.module.css';
 
 const MILISECONDS_IN_MINUTE = 60000;
 const MILISECONDS_IN_SECOND = 1000;
 
 const TimeView = (props) => {
-
-    const [count, setCount] = useState(0);
-
-    const textStyle = {
-        fontSize: '3.5em',
-        textAlign: 'center'
-    }
 
     const preZero = (time) => {
         return (time < 10 ? '0' : '') + time;
@@ -24,8 +17,8 @@ const TimeView = (props) => {
         return preZero(minutes) + ':' + preZero(seconds);
     }
 
-    return(
-        <h1 style={textStyle}>{getStringTime()}</h1>
+    return (
+        <h1 className={styles.textStyle}>{getStringTime()}</h1>
     )
 }
 

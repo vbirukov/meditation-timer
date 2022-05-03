@@ -1,0 +1,10 @@
+.flexCenter {
+	display: flex;
+	justify-content: center;
+}
+.width100 {
+	width: 100%;
+}
+.textCenter {
+    text-align: center;
+}

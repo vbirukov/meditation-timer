@@ -7,28 +7,16 @@ import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
-import audiolib from '../lib/audio';
-import TimeView from '../lib/timeView/timeView';
+import audiolib from '../../utils/audio';
+import TimeView from '../../components/time-view/time-view';
 import { Icon32PauseCircle, Icon32PlayCircle, Icon28Replay } from '@vkontakte/icons';
+import getPercentRelation from '../../utils/helpers';
+import styles from './home.module.css';
+import UserStats from '../../components/user-stats/user-stats';
+import ControlBtns from '../../components/control-btns/control-btns';
 
-const flexCenter = {
-	display: 'flex',
-	justifyContent: 'center'
-};
-
-const width100 = {
-	width: '100%'
-};
-
-const textCenter = {
-	textAlign: 'center'
-}
-
-const DEFAULT_TIMER_DURATION = 10 * 60000;
-
-const getPercentRelation = (base, part) => {
-	return (part / base) * 100;
-}
+const TIMER_DURATION_MULTIPLER = 60000;
+const DEFAULT_TIMER_DURATION = 10 * TIMER_DURATION_MULTIPLER;
 
 class Home extends Component {
 
@@ -103,76 +91,47 @@ class Home extends Component {
 
 	render() {
 
-		let resetButton;
+		const isResetBtnVisible = !this.state.isOn && this.state.timeLeft !== this.state.duration;
 
-		if (!this.state.isOn && this.state.timeLeft !== this.state.duration) {
-			resetButton = <Button
-							key='reset'
-							before={<Icon28Replay/>}
-							size="m"
-							onClick={e => this.resetTimer()}>
-						</Button>;
-		} else {
-			resetButton = '';
-		}
-
-		return(<Panel id={this.props.id}>
+		return (<Panel id={this.props.id}>
 			<PanelHeader>Dhyan Timer</PanelHeader>
-			{this.props.fetchedUser &&
-			<Group title={this.props.fetchedUser.first_name}>
-				<Cell
-					before={this.props.fetchedUser.photo_200 ? <Avatar src={this.props.fetchedUser.photo_200}/> : null}
-					description={this.props.fetchedUser.city && this.props.fetchedUser.city.title ? this.props.fetchedUser.city.title : ''}
-				>
-					{`${this.props.fetchedUser.first_name} ${this.props.fetchedUser.last_name}`}
-				</Cell>
-			</Group>
-			}
+			{this.props.fetchedUser && <UserStats user={this.props.fetchedUser} /> }
 
 			<Div onClick={e => this.toggleAdjust()}>
 				<TimeView time={this.state.timeLeft} />
-				<Progress style={width100} value={getPercentRelation(this.state.duration, this.state.duration - this.state.timeLeft)} />
+				<Progress className={styles.width100} value={getPercentRelation(this.state.duration, this.state.duration - this.state.timeLeft)} />
 			</Div>
 
 			{
-				this.state.adjustTimer &&
-				<Slider
-					min={1}
-					max={1000}
-					step={1}
-					value={Number(this.state.duration / 60000)}
-					onChange={value => {
-						this.setState({
-							duration: value * 60000
-						})
-					}}
-				/>
-			}
-			{
-				this.state.adjustTimer &&
-				<Div style={flexCenter}>
-					<Button
-						appearance='overlay'
-						key='saveDuration'
-						size="l"
-						onClick={e => this.toggleAdjust()}>
-						Сохранить
-						</Button>
-				</Div>
+				this.state.adjustTimer && (
+					<>
+						<Slider
+							min={1}
+							max={1000}
+							step={1}
+							value={Number(this.state.duration / TIMER_DURATION_MULTIPLER)}
+							onChange={value => {
+								this.setState({
+									timeLeft: value * TIMER_DURATION_MULTIPLER,
+									duration: value * TIMER_DURATION_MULTIPLER
+								})
+							}}
+						/>
+						<Div className={styles.flexCenter}>
+							<Button
+								appearance='overlay'
+								key='saveDuration'
+								size="l"
+								onClick={e => this.toggleAdjust()}>
+								Сохранить
+							</Button>
+						</Div>
+					</>
+				)
 			}
 
-			<Group title="controls">
-				<Div style={flexCenter}>
-					<Button
-						appearance='overlay'
-						before={this.state.isOn ? (<Icon32PauseCircle/>) : (<Icon32PlayCircle/>)}
-						key='toggler'
-						size="m"
-						onClick={e => this.toggleTimer()}>
-					</Button>
-					{resetButton}
-				</Div>
-			</Group>
+			<ControlBtns isOn={this.state.isOn} toggleTimer={this.toggleTimer.bind(this)} resetTimer={this.resetTimer.bind(this)} isResetBtnVisible={isResetBtnVisible} />
+
 		</Panel>);
 	}
 };
