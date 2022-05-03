@@ -1,29 +1,30 @@
 
 import React, {PropTypes} from "react";
-import { Icon32PauseCircle, Icon32PlayCircle, Icon28Replay } from '@vkontakte/icons';
 import styles from './control-btns.css';
+import { Icon48Pause, Icon48Play, Icon48Replay } from '@vkontakte/icons';
 import { Button, Div, Group } from "@vkontakte/vkui";
 
 const ControlBtns = (props) => {
     const {isOn, toggleTimer, resetTimer, isResetBtnVisible} = props;
-
+    const divName = styles.playButton;
     return (
         <Group title="controls">
-            <Div className={styles.flexCenter}>
-                <Button
-                    appearance='overlay'
-                    before={isOn ? (<Icon32PauseCircle/>) : (<Icon32PlayCircle/>)}
-                    key='toggler'
-                    size="m"
+
+            {/*почему то в этом файле React не видит импортированный styles */}
+            <Div className='flexCenter'>
+                <div
+                    className='playButton'
                     onClick={toggleTimer}>
-                </Button>
+                    {isOn ? (<Icon48Pause/>) : (<Icon48Play/>)}
+                </div>
                 {
-                    isResetBtnVisible && <Button
-                        key='reset'
-                        before={<Icon28Replay/>}
-                        size="m"
+                    isResetBtnVisible &&
+
+                    <div
+                        className='playButton'
                         onClick={resetTimer}>
-                    </Button>
+                        <Icon48Replay/>
+                    </div>
                 }
             </Div>
         </Group>
