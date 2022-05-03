@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import styles from './timer-view.module.css';
+import {Icon48ChevronDownOutline} from "@vkontakte/icons";
 
 const MILISECONDS_IN_MINUTE = 60000;
 const MILISECONDS_IN_SECOND = 1000;
@@ -18,7 +19,11 @@ const TimeView = (props) => {
     }
 
     return (
-        <h1 className={styles.textStyle}>{getStringTime()}</h1>
+        <div className={styles.timeViewWrapper}>
+            <h2 className={styles.textStyle}>Нажмите, чтобы изменить длительность</h2>
+            <Icon48ChevronDownOutline/>
+            <h1 className={styles.timer}>{getStringTime()}</h1>
+        </div>
     )
 }
 

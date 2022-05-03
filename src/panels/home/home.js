@@ -1,22 +1,20 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Avatar, Touch, Progress, Slider} from '@vkontakte/vkui';
+import { Counter, Slider, SimpleCell, InfoRow} from '@vkontakte/vkui';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
-import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import audiolib from '../../utils/audio';
 import TimeView from '../../components/time-view/time-view';
-import { Icon32PauseCircle, Icon32PlayCircle, Icon28Replay } from '@vkontakte/icons';
-import getPercentRelation from '../../utils/helpers';
 import styles from './home.module.css';
 import UserStats from '../../components/user-stats/user-stats';
 import ControlBtns from '../../components/control-btns/control-btns';
 
 const TIMER_DURATION_MULTIPLER = 60000;
 const DEFAULT_TIMER_DURATION = 10 * TIMER_DURATION_MULTIPLER;
+const TIMER_MIN_VALUE = 1;
+const TIMER_MAX_VALUE = 1000;
 
 class Home extends Component {
 
@@ -96,20 +94,21 @@ class Home extends Component {
 		return (<Panel id={this.props.id}>
 			<PanelHeader>Dhyan Timer</PanelHeader>
 			{this.props.fetchedUser && <UserStats user={this.props.fetchedUser} /> }
-
 			<Div onClick={e => this.toggleAdjust()}>
 				<TimeView time={this.state.timeLeft} />
-				<Progress className={styles.width100} value={getPercentRelation(this.state.duration, this.state.duration - this.state.timeLeft)} />
 			</Div>
-
 			{
 				this.state.adjustTimer && (
 					<>
+						<SimpleCell
+							before={<Counter mode='primary' size='m'>{TIMER_MIN_VALUE}</Counter>}
+							after={<Counter mode='primary' size='m'>{TIMER_MAX_VALUE}</Counter>}
+						></SimpleCell>
 						<Slider
 							min={1}
 							max={1000}
 							step={1}
-							value={Number(this.state.duration / TIMER_DURATION_MULTIPLER)}
+							value={this.state.duration / TIMER_DURATION_MULTIPLER}
 							onChange={value => {
 								this.setState({
 									timeLeft: value * TIMER_DURATION_MULTIPLER,
@@ -130,7 +129,11 @@ class Home extends Component {
 				)
 			}
 
-			<ControlBtns isOn={this.state.isOn} toggleTimer={this.toggleTimer.bind(this)} resetTimer={this.resetTimer.bind(this)} isResetBtnVisible={isResetBtnVisible} />
+			{
+				!this.state.adjustTimer && (
+					<ControlBtns isOn={this.state.isOn} toggleTimer={this.toggleTimer.bind(this)} resetTimer={this.resetTimer.bind(this)} isResetBtnVisible={isResetBtnVisible} />
+				)
+			}
 
 		</Panel>);
 	}
