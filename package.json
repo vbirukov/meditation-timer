@@ -16,6 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "cross-env": "^5.2.0",
+    "react-error-overlay": "^6.0.9",
     "react-hot-loader": "^4.9.0",
     "react-scripts": "^5.0.0"
   },

@@ -28,7 +28,8 @@ function App() {
 	useEffect(() => {
 		bridge.subscribe((response) => {bridgeEventManager(response)});
 		fetchUser().then(() => {
-			setState({...state, Popout: null})
+			state.Popout = null;
+			setState({...state})
 		});
 	}, []);
 
